@@ -20,7 +20,10 @@ jobs:
 
       - name: Build APK
         run: |
-          gradle wrapper --gradle-version 8.2 --no-daemon
+          wget https://services.gradle.org/distributions/gradle-8.7-bin.zip
+          unzip -q gradle-8.7-bin.zip
+          echo "$PWD/gradle-8.7/bin" >> $GITHUB_PATH
+          gradle wrapper --gradle-version 8.7 --no-daemon
           ./gradlew assembleDebug --no-daemon --batch-mode
 
       - name: Upload APK
