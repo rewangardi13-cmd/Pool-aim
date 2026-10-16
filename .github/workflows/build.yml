@@ -15,24 +15,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Download Gradle
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build APK
         run: |
           wget https://services.gradle.org/distributions/gradle-8.2-bin.zip
           unzip -q gradle-8.2-bin.zip
           echo "$PWD/gradle-8.2/bin" >> $GITHUB_PATH
-
-      - name: Install Android SDK Components
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
-        run: |
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-          yes | sdkmanager --licenses || true
-          sdkmanager "platforms;android-34" "build-tools;34.0.0"
-
-      - name: Build APK
-        run: |
           gradle wrapper --gradle-version 8.2
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
