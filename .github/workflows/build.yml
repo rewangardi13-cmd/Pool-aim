@@ -15,16 +15,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Build APK
         run: |
-          wget https://services.gradle.org/distributions/gradle-8.2-bin.zip
-          unzip -q gradle-8.2-bin.zip
-          echo "$PWD/gradle-8.2/bin" >> $GITHUB_PATH
-          gradle wrapper --gradle-version 8.2
-          ./gradlew assembleDebug --no-daemon
+          gradle wrapper --gradle-version 8.2 --no-daemon
+          ./gradlew assembleDebug --no-daemon --batch-mode
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
